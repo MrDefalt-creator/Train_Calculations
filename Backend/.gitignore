@@ -1,0 +1,49 @@
+# Виртуальные окружения
+venv/
+env/
+.venv/
+
+# Файлы кэша Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Распространяемые среды (например, для poetry или pipenv)
+*.env
+.venv
+
+# Установленные пакеты (если используете pip)
+*.egg-info/
+build/
+dist/
+
+# Файлы настроек IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Файлы логов и временные файлы
+*.log
+*.sqlite3
+
+# Файлы конфигурации (например, для dotenv)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Файлы, созданные при установке пакетов (например, для setuptools)
+develop-eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Прочие
+.DS_Store
+Thumbs.db
