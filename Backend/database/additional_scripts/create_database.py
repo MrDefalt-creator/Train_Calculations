@@ -1,10 +1,13 @@
-from database.database import engine, metadata
+from sqlalchemy.orm import Session
 
-from .. import tables
+from database.database import engine
+from database.tables import AbstractModel
 
 
 def create_database():
-    metadata.create_all(engine)
+    with Session(engine) as session:
+        with session.begin():
+            AbstractModel.metadata.create_all(engine) 
 
 if __name__ == "__main__":
     create_database()

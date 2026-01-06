@@ -1,29 +1,27 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, as_declarative, mapped_column
 
-from database.database import metadata
 
-user_table = Table(
-    "users",
-    metadata,
-    Column("id", Integer, primary_key=True, autoincrement="auto", nullable=False),
-    Column("login", String(200), index=True, unique=True, nullable=False),
-    Column("password", String(200), nullable=False),
-    Column("admin_rights", Boolean, default=False, nullable=False)
-)
+@as_declarative()
+class AbstractModel:
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, nullable=False)
 
-stations_table = Table(
-    "stations",
-    metadata,
-    Column("id", Integer, primary_key=True, autoincrement="auto", nullable=False),
-    Column("name", String(200), index=True, unique=True, nullable=False),
-)
+class UserTable(AbstractModel):
+    __tablename__ = "users"
 
-routes_table = Table(
-    "routes",
-    metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True, nullable=False),
-    Column("from_station", Integer, ForeignKey(column='stations.id'), nullable=False,),
-    Column("to_station", Integer, ForeignKey(column='stations.id'), nullable=False),
-    Column("distance", Integer, nullable=False),
-    Column("travel_time", Integer, nullable=False)
-)
+    login: Mapped[str] = mapped_column(String(200), index=True, unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(200), nullable=False)
+    admin_rights: Mapped[bool] = mapped_column(default=False, nullable=False)
+
+class StationTable(AbstractModel):
+    __tablename__ = "stations"
+
+    name: Mapped[str] = mapped_column(String(200), index=True, unique=True, nullable=False)
+
+class RouteTable(AbstractModel):
+    __tablename__ = "routes"
+
+    from_station: Mapped[int] = mapped_column(Integer, ForeignKey('stations.id'), nullable=False,)
+    to_station: Mapped[int] = mapped_column(Integer, ForeignKey('stations.id'), nullable=False)
+    distance: Mapped[int] = mapped_column( nullable=False)
+    travel_time: Mapped[int] = mapped_column(nullable=False)
