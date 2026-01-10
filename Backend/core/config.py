@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     DB_PASSWORD: Optional[str] = "root"
     DB_NAME: Optional[str] = "train_db"
 
+    SECRET_KEY: Optional[str] = "170b45bc27972f7ddbf40919a2f747712370c1747f39246e95178e06d2a6cbd1"
+    ALGORITHM: Optional[str] = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: Optional[int] = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: Optional[int] = 30
+
     @property
     def database_url(self) -> str:
         if all([self.DB_HOST, self.DB_PORT, self.DB_USER, self.DB_PASSWORD, self.DB_NAME]):

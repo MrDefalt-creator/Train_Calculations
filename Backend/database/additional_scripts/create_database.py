@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-import bcrypt
+from pwdlib import PasswordHash
 from database.database import engine
 from database.tables import AbstractModel, UserTable
 
@@ -14,12 +14,11 @@ def create_tables():
 def create_admin():
     with Session(engine) as session:
         with session.begin():
-            hashed_password = bcrypt.hashpw(
-                "admin".encode('utf-8'),
-                bcrypt.gensalt()
-            ).decode('utf-8')
+            password_hasher = PasswordHash.recommended()
+            hashed_password = password_hasher.hash("admin")
             admin = UserTable(login="admin", password=hashed_password, admin_rights=True)
             session.add(admin)
+            session.commit()
             session.close()
 
 

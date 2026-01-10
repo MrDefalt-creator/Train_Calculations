@@ -1,20 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Response
 from schemas.user import Login
 from services.user_service import UserService
 from core.dependencies import get_user_service
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-
 @router.post("/login")
-def login(data: Login, service: UserService = Depends(get_user_service)):
-    user = service.login(data.login, data.password)
+def login(data: Login, response: Response, service: UserService = Depends(get_user_service)):
+    access, refresh = service.login(data.login, data.password)
 
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid login or password")
+    response.set_cookie(key="refresh", value=access,
+                        httponly=True, samesite="lax",
+                        secure=False
+                        )
 
     return {
-        "id": user.id,
-        "login": user.login,
-        "admin": user.admin_rights
+        "token": access,
     }
