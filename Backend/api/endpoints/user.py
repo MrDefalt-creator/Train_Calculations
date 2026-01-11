@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 from schemas.user import Login
 from services.user_service import UserService
 from core.dependencies import get_user_service
@@ -17,3 +17,18 @@ def login(data: Login, response: Response, service: UserService = Depends(get_us
     return {
         "token": access,
     }
+
+@router.post("/refresh")
+def update_token(request: Request, service: UserService = Depends(get_user_service)):
+    refresh = request.cookies.get("refresh")
+
+    token = service.update_access_token(refresh)
+
+    return {
+        "token": token,
+    }
+
+
+
+
+

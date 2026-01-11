@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     DB_PASSWORD: Optional[str] = "root"
     DB_NAME: Optional[str] = "train_db"
 
-    SECRET_KEY: Optional[str] = "170b45bc27972f7ddbf40919a2f747712370c1747f39246e95178e06d2a6cbd1"
+    SECRET_KEY_ACCESS: Optional[str] = "170b45bc27972f7ddbf40919a2f747712370c1747f39246e95178e06d2a6cbd1"
+    SECRET_KEY_REFRESH: Optional[str] = "b593e308abc68289966041037a603700f2d5ba466095c66b07085692de2efb2c"
     ALGORITHM: Optional[str] = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: Optional[int] = 30
     REFRESH_TOKEN_EXPIRE_DAYS: Optional[int] = 30

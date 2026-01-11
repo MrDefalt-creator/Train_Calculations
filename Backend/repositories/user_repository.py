@@ -14,3 +14,10 @@ class UserRepository:
             .filter(UserTable.login == login)
             .first()
         )
+    def find_by_id(self, id: int) -> UserTable | None:
+        return (
+            self.db
+            .query(UserTable)
+            .filter(UserTable.id == id)
+            .first()
+        )

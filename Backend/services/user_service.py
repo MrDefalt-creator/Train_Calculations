@@ -26,3 +26,21 @@ class UserService:
         refresh = self.jwt_service.create_refresh_token(data={"id": user.id})
 
         return token, refresh
+
+    def update_access_token(self, refresh: str):
+        token = self.jwt_service.decode_access_token(refresh)
+
+        user = self.user_repository.find_by_id(token["id"])
+
+        if not user:
+            raise HTTPException(status_code=401, detail="Incorrect login or password")
+
+        token = self.jwt_service.create_access_token(
+            data={"id": user.id, "sub": user.login, "admin": user.admin_rights}
+        )
+
+        return token
+
+
+
+
