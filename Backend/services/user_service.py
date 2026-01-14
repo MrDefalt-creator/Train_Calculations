@@ -1,13 +1,18 @@
 from pwdlib import PasswordHash
 from fastapi import HTTPException
+
+from core.config import Settings
 from repositories.user_repository import UserRepository
 from services.jwt_service import JwtService
-
+from database.database import SessionLocal
+from sqlalchemy.orm import Session
 
 class UserService:
-    def __init__(self, user_repository: UserRepository, jwt_service: JwtService):
-        self.user_repository = user_repository
-        self.jwt_service = jwt_service
+    def __init__(self, db_session: Session = None, jwt_service: JwtService = None):
+        self.db = db_session if db_session else SessionLocal()
+        self.settings = Settings()
+        self.user_repository = UserRepository(self.db)
+        self.jwt_service = jwt_service or JwtService(settings=self.settings)
         self.password_hasher = PasswordHash.recommended()
 
     def login(self, login: str, password: str):
