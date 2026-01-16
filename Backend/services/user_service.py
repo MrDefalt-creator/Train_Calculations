@@ -8,11 +8,11 @@ from database.database import SessionLocal
 from sqlalchemy.orm import Session
 
 class UserService:
-    def __init__(self, db_session: Session = None, jwt_service: JwtService = None):
+    def __init__(self, db_session: Session = None):
         self.db = db_session if db_session else SessionLocal()
         self.settings = Settings()
         self.user_repository = UserRepository(self.db)
-        self.jwt_service = jwt_service or JwtService(settings=self.settings)
+        self.jwt_service = JwtService()
         self.password_hasher = PasswordHash.recommended()
 
     def login(self, login: str, password: str):
@@ -25,7 +25,7 @@ class UserService:
             raise HTTPException(status_code=401, detail="Incorrect login or password")
 
         token = self.jwt_service.create_access_token(
-            data={"id": user.id, "sub": user.login, "admin": user.admin_rights}
+            data={"sub": user.id, "admin": user.admin_rights}
         )
 
         refresh = self.jwt_service.create_refresh_token(data={"id": user.id})
@@ -41,7 +41,7 @@ class UserService:
             raise HTTPException(status_code=401, detail="Incorrect login or password")
 
         token = self.jwt_service.create_access_token(
-            data={"id": user.id, "sub": user.login, "admin": user.admin_rights}
+            data={"sub": user.id, "admin": user.admin_rights}
         )
 
         return token

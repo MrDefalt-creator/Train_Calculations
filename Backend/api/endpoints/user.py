@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Response, Request, HTTPException
 from schemas.user import Login
 from services.user_service import UserService
 
@@ -20,6 +20,8 @@ def login(data: Login, response: Response):
 @router.post("/refresh")
 def update_token(request: Request):
     refresh = request.cookies.get("refresh")
+    if not refresh:
+        raise HTTPException(status_code=401, detail="No refresh token")
 
     token = UserService.update_access_token(refresh)
 
