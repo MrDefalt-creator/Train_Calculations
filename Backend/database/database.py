@@ -3,9 +3,10 @@ from sqlalchemy.orm import sessionmaker
 
 from core.config import Settings
 
+settings = Settings()
 
 engine = create_engine(
-    Settings.database_url,
+    settings.database_url,
     echo=True,
     pool_size=5,
     max_overflow=10

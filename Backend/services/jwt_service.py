@@ -15,6 +15,7 @@ class JwtService:
         else :
             expire = datetime.now(timezone.utc) + timedelta(self.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         to_encode.update({"exp": expire})
+        to_encode.update({"type": "refresh"})
         encoded_jwt = jwt.encode(to_encode, self.settings.SECRET_KEY_ACCESS, algorithm=self.settings.ALGORITHM)
         return encoded_jwt
 
@@ -22,11 +23,10 @@ class JwtService:
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(timezone.utc) + expires_delta
-            to_encode.update({"exp": expire})
-            to_encode.update({"type": "refresh"})
         else:
             expire = datetime.now(timezone.utc) + timedelta(days=self.settings.REFRESH_TOKEN_EXPIRE_DAYS)
-            to_encode.update({"exp": expire})
+        to_encode.update({"exp": expire})
+        to_encode.update({"type": "refresh"})
         encoded_jwt = jwt.encode(to_encode, self.settings.SECRET_KEY_REFRESH, algorithm=self.settings.ALGORITHM)
         return encoded_jwt
 
